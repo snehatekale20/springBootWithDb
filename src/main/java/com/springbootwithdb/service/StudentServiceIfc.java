@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 
 import com.springbootwithdb.entity.Student;
+import com.springbootwithdb.exceptionHandler.RecordNotFoundCustomeExp;
 
 @Configuration
 public interface StudentServiceIfc {
@@ -14,7 +15,7 @@ public interface StudentServiceIfc {
 
 	public List<Student> getAllStudent();
 
-	public Student getOneStudent(int rollNo);
+	public Student getOneStudent(int rollNo) throws RecordNotFoundCustomeExp;
 
 	public void deleteStudent(int rollNo);
 

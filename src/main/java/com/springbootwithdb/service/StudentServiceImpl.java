@@ -1,15 +1,21 @@
 package com.springbootwithdb.service;
 
 import java.util.List;
+import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.springbootwithdb.controller.StudentController;
 import com.springbootwithdb.entity.Student;
+import com.springbootwithdb.exceptionHandler.RecordNotFoundCustomeExp;
 import com.springbootwithdb.repository.StudentRepoIfc;
 
 @Service
 public class StudentServiceImpl implements StudentServiceIfc{
+	Logger logger = LoggerFactory.getLogger(StudentServiceImpl.class);
 
 	@Autowired
 	StudentRepoIfc studRepo;
@@ -20,11 +26,19 @@ public class StudentServiceImpl implements StudentServiceIfc{
 	}
 	@Override
 	public List<Student> getAllStudent() {
-		return (List<Student>) studRepo.findAll();
+		logger.info("StudentImpl: listofstudent");
+		List<Student> st = studRepo.findAll();
+		logger.info("all students: "+st);
+		return st;
 	}
 	@Override
-	public Student getOneStudent(int rollNo) {
-		return studRepo.findById(rollNo).get();
+	public Student getOneStudent(int rollNo) throws RecordNotFoundCustomeExp {
+		Optional<Student> st = studRepo.findById(rollNo);
+		if(st.isPresent()) {
+		return st.get();
+		}else {
+			throw new RecordNotFoundCustomeExp("RollNo is not present: "+rollNo);
+		}
 	}
 	@Override
 	public void deleteStudent(int rollNo) {
